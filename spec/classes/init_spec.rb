@@ -59,6 +59,15 @@ describe 'monero' do
         end
 
         it do
+          should contain_file('/var/log/monero').with({
+            'ensure' => 'directory',
+            'owner'  => 'monero',
+            'group'  => 'monero',
+            'mode'   => '0755',
+          })
+        end
+
+        it do
           should contain_file('monero_data_dir').with({
             'ensure' => 'directory',
 	    'path'   => '/var/lib/monero',

@@ -34,4 +34,10 @@ class monero::install inherits monero {
     group  => $group,
     mode   => '0755',
   }
+  file { '/var/log/monero':
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+  }
 }
