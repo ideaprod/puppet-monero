@@ -12,6 +12,7 @@ class monero::install inherits monero {
     ensure  => present,
     comment => 'Monero Daemon',
     gid     => $monero::group,
+    home    => $data_dir,
     shell   => '/bin/false',
     system  => true,
   }

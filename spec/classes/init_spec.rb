@@ -43,6 +43,7 @@ describe 'monero' do
             'ensure'  => 'present',
             'comment' => 'Monero Daemon'
             'gid'     => 'monero',
+            'home'    => '/var/lib/monero',
             'shell'   => '/bin/false',
             'system'  => true,
           })
