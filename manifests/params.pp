@@ -12,7 +12,7 @@ class monero::params {
   $service_enable = true
   $service_ensure = 'running'
   $service_manage = true
-  $service_name   = 'monero'
+  $service_name   = 'monerod'
   $user           = 'monero'
 
   # <OS family handling>

@@ -74,7 +74,7 @@ describe 'monero' do
             'owner'   => 'monero',
             'group'   => 'monero',
             'mode'    => '0644',
-	    'notify'  => 'Service[monero]' 
+	    'notify'  => 'Service[monerod]' 
           })
         end
 
@@ -94,10 +94,10 @@ describe 'monero' do
 	it { should contain_file('/lib/systemd/system/monerod.service').with_content(monero_service_fixture) }
 
         it do
-          should contain_service('monero').with({
+          should contain_service('monerod').with({
             'ensure'     => 'running',
-            'name'       => 'monero',
             'enable'     => true,
+	    'name'       => 'monerod',
             'hasrestart' => true,
             'subscribe'  => [
               'File[monero_config]',
