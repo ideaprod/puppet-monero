@@ -1,0 +1,5 @@
+# monerod.conf: Managed by puppet.
+#
+data-dir=/var/lib/monero
+log-file=/var/log/monero/monero.log
+log-level=0

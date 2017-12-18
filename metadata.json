@@ -1,0 +1,40 @@
+{
+  "name": "ideaprod-monero",
+  "version": "0.1.0",
+  "author": "Ideaprod SAS",
+  "summary": "Puppet module to manage monero installation and configuration",
+  "license": "Apache-2.0",
+  "source": "https://github.com/ideaprod/puppet-monero",
+  "project_page": "https://github.com/ideaprod/puppet-monero",
+  "issues_url": "https://github.com/ideaprod/puppet-monero/issues",
+  "tags": [
+    "crypto"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.2.0 < 5.0.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.0.0 < 5.0.0"
+    }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/archive","version_requirement":">= 2.0.0"}
+  ]
+}
