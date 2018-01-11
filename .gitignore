@@ -1,31 +1,23 @@
-# Default .gitignore for Ruby
-*.gem
-*.rbc
-.bundle
-.config
-coverage
-InstalledFiles
-lib/bundler/man
-pkg
-rdoc
-spec/reports
-test/tmp
-test/version_tmp
-tmp
-Gemfile.lock
-
-# YARD artifacts
+.*.sw[op]
+.metadata
 .yardoc
-_yardoc
-doc/
+.yardwarns
+*.iml
+/.bundle/
+/.idea/
+/.vagrant/
+/coverage/
+/bin/
+/doc/
+/Gemfile.local
+/Gemfile.lock
+/junit/
+/log/
+/log/
+/pkg/
+/spec/fixtures/manifests/
+/spec/fixtures/modules/
+/tmp/
+/vendor/
+/convert_report.txt
 
-# Vim
-*.swp
-
-# OS X
-.DS_Store
-
-# Puppet
-coverage/
-spec/fixtures/modules/*
-spec/fixtures/manifests/*
