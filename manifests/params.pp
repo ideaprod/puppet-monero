@@ -18,14 +18,31 @@ class monero::params {
   # <OS family handling>
   case $::osfamily {
     'Debian': {
-      case $::lsbdistcodename {
-        'jessie', 'xenial': {
+      case $::operatingsystem {
+        'Debian': {
+          case $::operatingsystemrelease {
+            /^8/: {
+            }
+            default: {
+              fail("monero supports Debian 8 (jessie). Detected \
+operatingsystemrelease is <${::operatingsystemrelease}>.")
+            }
+          }
+        }
+        'Ubuntu': {
+          case $::operatingsystemrelease {
+            /^16.04/: {
+            }
+            default: {
+              fail("monero supports Ubuntu 16.04 (xenial). Detected \
+operatingsystemrelease is <${::operatingsystemrelease}>.")
+            }
+          }
         }
         default: {
-          fail("monero supports 8 (jessie) and Ubuntu 16.04 (xenial). \
-Detected lsbdistcodename is <${::lsbdistcodename}>.")
+          fail("monero supports Debian and Ubuntu. Detected operatingsystem is \
+<${::operatingsystem}>.")
         }
-
       }
     }
     default: {

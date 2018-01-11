@@ -29,6 +29,5 @@ class monero::config inherits monero {
     group   => $monero::group,
     mode    => '0644',
     content => template('monero/monerod.conf.erb'),
-    notify  => Service['monerod'],
   }
 }

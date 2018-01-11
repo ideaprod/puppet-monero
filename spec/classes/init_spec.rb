@@ -1,28 +1,10 @@
 require 'spec_helper'
-describe 'monero' do
-  platforms = {
-    'debian8' =>
-      { osfamily:        'Debian',
-        release:         '8.0',
-        majrelease:      '8',
-        lsbdistcodename: 'jessie' },
-    'ubuntu1604' =>
-      { osfamily:        'Debian',
-        release:         '16.04',
-        majrelease:      '16',
-        lsbdistcodename: 'xenial' },
-  }
 
-  describe 'with default values for parameters on' do
-    platforms.sort.each do |k, v|
-      context k.to_s do
-        let :facts do
-          { lsbdistcodename:           v[:lsbdistcodename],
-            osfamily:                  v[:osfamily],
-            kernelrelease:             v[:release], # Solaris specific
-            operatingsystemrelease:    v[:release], # Linux specific
-            operatingsystemmajrelease: v[:majrelease] }
-        end
+describe 'monero' do
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os}" do
+        let(:facts) { facts }
 
         it { is_expected.to compile.with_all_deps }
 
@@ -64,27 +46,18 @@ describe 'monero' do
                                                               'mode'   => '0755')
         end
 
+        monero_config_fixture = File.read(fixtures('monerod.conf'))
         it do
-          is_expected.to contain_file('monero_config').with('ensure' => 'file',
+          is_expected.to contain_file('monero_config').with_content(monero_config_fixture)
+                                                      .with('ensure' => 'file',
                                                             'path'   => '/etc/monerod.conf',
                                                             'owner'  => 'monero',
                                                             'group'  => 'monero',
-                                                            'mode'   => '0644',
-                                                            'notify' => 'Service[monerod]')
+                                                            'mode'   => '0644')
         end
 
-        monero_config_fixture = File.read(fixtures("monerod.conf.#{k}"))
-        it { is_expected.to contain_file('monero_config').with_content(monero_config_fixture) }
-
-        it do
-          is_expected.to contain_file('/lib/systemd/system/monerod.service').with('ensure' => 'file',
-                                                                                  'owner'  => 'root',
-                                                                                  'group'  => 'root',
-                                                                                  'mode'   => '0644')
-        end
-
-        monero_service_fixture = File.read(fixtures("monerod.service.#{k}"))
-        it { is_expected.to contain_file('/lib/systemd/system/monerod.service').with_content(monero_service_fixture) }
+        monero_service_fixture = File.read(fixtures('monerod.service'))
+        it { is_expected.to contain_systemd__unit_file('monerod.service').with_content(monero_service_fixture) }
 
         it do
           is_expected.to contain_service('monerod').with('ensure'     => 'running',
@@ -93,102 +66,111 @@ describe 'monero' do
                                                          'hasrestart' => true,
                                                          'subscribe'  => 'File[monero_config]')
         end
+        describe 'parameter functionality' do
+          context 'when service_enable is set to valid bool <false>' do
+            let(:params) { { service_enable: false } }
+
+            it { is_expected.to contain_service('monerod').with_enable(false) }
+          end
+
+          context 'when service_ensure is set to valid string <stopped>' do
+            let(:params) { { service_ensure: 'stopped' } }
+
+            it { is_expected.to contain_service('monerod').with_ensure('stopped') }
+          end
+
+          context 'when service_manage is set to valid bool <false>' do
+            let(:params) { { service_manage: false } }
+
+            it { is_expected.not_to contain_service('monerod') }
+            it { is_expected.not_to contain_systemd__unit_file('monerod.service') }
+          end
+
+          context 'when service_name is set to valid string <stopped>' do
+            let(:params) { { service_name: 'monero3' } }
+
+            it { is_expected.to contain_service('monerod').with_name('monero3') }
+          end
+
+          context 'when log_file is set to valid string <monero3.log>' do
+            let(:params) { { log_file: 'monero3.log' } }
+
+            it { is_expected.to contain_file('monero_config').with_content(%r{^log-file=/var/log/monero/monero3\.log$}) }
+          end
+
+          context 'when config_file is set to valid string <monero3.conf>' do
+            let(:params) { { config_file: 'monero3.conf' } }
+
+            it { is_expected.to contain_file('monero_config').with_path('/etc/monero3.conf') }
+          end
+
+          context 'when config_dir is set to valid path </etc/monero>' do
+            let(:params) { { config_dir: '/etc/monero' } }
+
+            it { is_expected.to contain_file('monero_config_dir').with_path('/etc/monero') }
+          end
+        end
       end
-    end
-  end
-
-  describe 'parameter functionality' do
-    let(:facts) do
-      {
-        osfamily:        'Debian',
-        lsbdistcodename: 'jessie',
-      }
-    end
-
-    context 'when service_enable is set to valid bool <false>' do
-      let(:params) { { service_enable: false } }
-
-      it { is_expected.to contain_service('monero').with_enable(false) }
-    end
-
-    context 'when service_ensure is set to valid string <stopped>' do
-      let(:params) { { service_ensure: 'stopped' } }
-
-      it { is_expected.to contain_service('monero').with_ensure('stopped') }
-    end
-
-    context 'when service_manage is set to valid bool <false>' do
-      let(:params) { { service_manage: false } }
-
-      it { is_expected.not_to contain_service('monero') }
-      it { is_expected.not_to contain_file('/lib/systemd/system/monero.service') }
-    end
-
-    context 'when service_name is set to valid string <stopped>' do
-      let(:params) { { service_name: 'monero3' } }
-
-      it { is_expected.to contain_service('monero').with_name('monero3') }
-    end
-
-    context 'when log_file is set to valid string <monero3.log>' do
-      let(:params) { { logfile: 'monero3.log' } }
-
-      it { is_expected.to contain_file('monero_config').with_content(%r{^set logfile /var/log/monero/monero3.log$}) }
-    end
-
-    context 'when config_file is set to valid string <monero3.conf>' do
-      let(:params) { { config_file: 'monero3.conf' } }
-
-      it { is_expected.to contain_file('monero_config').with_path('/etc/monero3.conf') }
-    end
-
-    context 'when config_dir is set to valid path </etc/monero>' do
-      let(:params) { { config_dir: '/etc/monero' } }
-
-      it { is_expected.to contain_file('monero_config_dir').with_path('/etc/monero') }
     end
   end
 
   describe 'failures' do
     let(:facts) do
       {
-        osfamily:        'Debian',
-        lsbdistcodename: 'jessie',
+        osfamily:               'Debian',
+        operatingsystem:        'Debian',
+        operatingsystemrelease: '8.0',
+        path:                   '/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games',
+        os: {
+          family: 'Debian',
+        },
       }
     end
 
     context 'when major release of Debian is unsupported' do
       let :facts do
         { osfamily:                  'Debian',
-          operatingsystemmajrelease: '4',
-          lsbdistcodename:           'etch' }
+          operatingsystem:           'Debian',
+          operatingsystemrelease:    '4.0' }
       end
 
       it 'fails' do
         expect {
           is_expected.to contain_class('monero')
-        }.to raise_error(Puppet::Error, %r{monero supports Debian 8 \(jessie\) and Ubuntu 16.04 \(xenial\). Detected lsbdistcodename is <etch>\.})
+        }.to raise_error(Puppet::Error, %r{monero supports Debian 8 \(jessie\)\. Detected operatingsystemrelease is <4\.0>\.})
       end
     end
 
     context 'when major release of Ubuntu is unsupported' do
       let :facts do
         { osfamily:                  'Debian',
-          operatingsystemmajrelease: '8',
-          lsbdistcodename:           'hardy' }
+          operatingsystem:           'Ubuntu',
+          operatingsystemrelease:    '8.0' }
       end
 
       it 'fails' do
         expect {
           is_expected.to contain_class('monero')
-        }.to raise_error(Puppet::Error, %r{monero supports Debian 8 \(jessie\) and Ubuntu 16.04 \(xenial\). Detected lsbdistcodename is <etch>\.})
+        }.to raise_error(Puppet::Error, %r{monero supports Ubuntu 16\.04 \(xenial\)\. Detected operatingsystemrelease is <8\.0>\.})
+      end
+    end
+
+    context 'when operatingsystem is unsupported' do
+      let :facts do
+        { osfamily:        'Debian',
+          operatingsystem: 'Unsupported' }
+      end
+
+      it 'fails' do
+        expect {
+          is_expected.to contain_class('monero')
+        }.to raise_error(Puppet::Error, %r{monero supports Debian and Ubuntu\. Detected operatingsystem is <Unsupported>\.})
       end
     end
 
     context 'when osfamily is unsupported' do
       let :facts do
-        { osfamily:                  'Unsupported',
-          operatingsystemmajrelease: '9' }
+        { osfamily: 'Unsupported' }
       end
 
       it 'fails' do
@@ -204,9 +186,13 @@ describe 'monero' do
     let(:facts) do
       {
         osfamily:                  'Debian',
+        operatingsystem:           'Debian',
         operatingsystemrelease:    '8.0',
-        operatingsystemmajrelease: '8',
         lsbdistcodename:           'jessie',
+        path:                      '/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games',
+        os: {
+          family: 'Debian',
+        },
       }
     end
     let(:validation_params) do
@@ -229,7 +215,7 @@ describe 'monero' do
         message: '(is not a boolean|Unknown type of boolean)',
       },
       'integer_stringified' => {
-        name: %w[lo_level],
+        name: %w[log_level],
         valid: [242, '242'],
         invalid: [2.42, 'invalid', %w[array], { 'ha' => 'sh ' }, true, false, nil],
         message: 'Expected.*to be an Integer',
