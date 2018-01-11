@@ -7,15 +7,13 @@ class monero::service inherits monero {
   if $monero::service_manage_bool {
     systemd::unit_file { 'monerod.service':
       content => template('monero/monerod.service.erb'),
-    } ~>
-    service { 'monerod':
+    }
+    ~> service { 'monerod':
       ensure     => $monero::service_ensure,
       name       => $monero::service_name,
       enable     => $monero::service_enable,
       hasrestart => true,
-      subscribe  => [
-        File['monero_config'],
-      ],
+      subscribe  => File['monero_config'],
     }
   }
 }

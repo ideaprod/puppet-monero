@@ -1,18 +1,15 @@
 # monero
 
+[![Build Status](https://travis-ci.org/ideaprod/puppet-monero.svg?branch=master)](https://travis-ci.org/ideaprod/puppet-monero)
+
 #### Table of Contents
 
-1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Usage - Configuration options and additional functionality](#usage)
-4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
-7. [Contributors](#contributors)
-
-## Overview
-
-Puppet module to manage Monero installation and configuration.
+1. [Module Description - What the module does and why it is useful](#module-description)
+2. [Usage - Configuration options and additional functionality](#usage)
+3. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+4. [Limitations - OS compatibility, etc.](#limitations)
+5. [Development - Guide for contributing to the module](#development)
+6. [Contributors](#contributors)
 
 ## Module Description
 

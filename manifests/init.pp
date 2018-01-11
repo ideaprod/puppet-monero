@@ -43,9 +43,9 @@ class monero (
   validate_string($user)
   # </variable validations>
 
-  anchor { "${module_name}::begin": } ->
-  class { "${module_name}::install": } ->
-  class { "${module_name}::config": } ~>
-  class { "${module_name}::service": } ->
-  anchor { "${module_name}::end": }
+  anchor { "${module_name}::begin": }
+  -> class { "${module_name}::install": }
+  -> class { "${module_name}::config": }
+  ~> class { "${module_name}::service": }
+  -> anchor { "${module_name}::end": }
 }

@@ -7,12 +7,12 @@ class monero::install inherits monero {
   group { $monero::group:
     ensure => present,
     system => true,
-  }->
-  user { $monero::user:
+  }
+  -> user { $monero::user:
     ensure  => present,
     comment => 'Monero Daemon',
     gid     => $monero::group,
-    home    => $data_dir,
+    home    => $monero::data_dir,
     shell   => '/bin/false',
     system  => true,
   }
@@ -30,14 +30,14 @@ class monero::install inherits monero {
 
   file { '/run/monero':
     ensure => directory,
-    owner  => $user,
-    group  => $group,
+    owner  => $monero::user,
+    group  => $monero::group,
     mode   => '0755',
   }
   file { '/var/log/monero':
     ensure => directory,
-    owner  => $user,
-    group  => $group,
+    owner  => $monero::user,
+    group  => $monero::group,
     mode   => '0755',
   }
 }
