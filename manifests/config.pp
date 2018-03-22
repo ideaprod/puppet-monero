@@ -35,7 +35,7 @@ class monero::config inherits monero {
     path    => "${monero::config_dir}/${monero::wallet_rpc_config_file}",
     owner   => $monero::user,
     group   => $monero::group,
-    mode    => '0644',
+    mode    => '0640',
     content => template('monero/monero-wallet-rpc.conf.erb'),
   }
 

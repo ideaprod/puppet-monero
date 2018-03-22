@@ -74,7 +74,7 @@ describe 'monero' do
                                                                      'path'   => '/etc/monero/monero-wallet-rpc.conf',
                                                                      'owner'  => 'monero',
                                                                      'group'  => 'monero',
-                                                                     'mode'   => '0644')
+                                                                     'mode'   => '0640')
         end
 
         wallet_rpc_service_fixture = File.read(fixtures('monero-wallet-rpc.service'))
@@ -164,7 +164,7 @@ describe 'monero' do
       let :facts do
         { osfamily:                'Debian',
           operatingsystem:         'Debian',
-        operatingsystemmajrelease: '4',
+          operatingsystemmajrelease: '4',
           operatingsystemrelease:  '4.0' }
       end
 
@@ -179,7 +179,7 @@ describe 'monero' do
       let :facts do
         { osfamily:                'Debian',
           operatingsystem:         'Ubuntu',
-        operatingsystemmajrelease: '8',
+          operatingsystemmajrelease: '8',
           operatingsystemrelease:  '8.0' }
       end
 
