@@ -1,5 +1,6 @@
 # monero-wallet-rpc.conf: Managed by puppet.
 #
-data-dir=<%= @data_dir %>
 log-file=<%= @log_dir %>/<%= @wallet_rpc_log_file %>
 log-level=<%= @log_level %>
+rpc-bind-port=8082
+wallet-dir=<%= @data_dir %>

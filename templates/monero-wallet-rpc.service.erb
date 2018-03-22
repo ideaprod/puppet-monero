@@ -8,11 +8,7 @@ Group=<%= @group %>
 WorkingDirectory=~
 RuntimeDirectory=monero
 
-Type=forking
-PIDFile=/run/monero/monero-wallet-rpc.pid
-
-ExecStart=/opt/monero-v0.11.1.0/monero-wallet-rpc --config-file <%= @config_dir %>/<%= @wallet_rpc_config_file %> \
-    --detach --pidfile /run/monero/monero-wallet-rpc.pid
+ExecStart=/opt/monero-v0.11.1.0/monero-wallet-rpc --config-file <%= @config_dir %>/<%= @wallet_rpc_config_file %>
 
 Restart=always
 PrivateTmp=true
