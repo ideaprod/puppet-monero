@@ -149,10 +149,11 @@ describe 'monero' do
   describe 'failures' do
     let(:facts) do
       {
-        osfamily:               'Debian',
-        operatingsystem:        'Debian',
-        operatingsystemrelease: '8.0',
-        path:                   '/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games',
+        osfamily:                  'Debian',
+        operatingsystem:           'Debian',
+        operatingsystemmajrelease: '8',
+        operatingsystemrelease:    '8.0',
+        path:                      '/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games',
         os: {
           family: 'Debian',
         },
@@ -161,9 +162,10 @@ describe 'monero' do
 
     context 'when major release of Debian is unsupported' do
       let :facts do
-        { osfamily:                  'Debian',
-          operatingsystem:           'Debian',
-          operatingsystemrelease:    '4.0' }
+        { osfamily:                'Debian',
+          operatingsystem:         'Debian',
+        operatingsystemmajrelease: '4',
+          operatingsystemrelease:  '4.0' }
       end
 
       it 'fails' do
@@ -175,9 +177,10 @@ describe 'monero' do
 
     context 'when major release of Ubuntu is unsupported' do
       let :facts do
-        { osfamily:                  'Debian',
-          operatingsystem:           'Ubuntu',
-          operatingsystemrelease:    '8.0' }
+        { osfamily:                'Debian',
+          operatingsystem:         'Ubuntu',
+        operatingsystemmajrelease: '8',
+          operatingsystemrelease:  '8.0' }
       end
 
       it 'fails' do
@@ -219,6 +222,7 @@ describe 'monero' do
       {
         osfamily:                  'Debian',
         operatingsystem:           'Debian',
+        operatingsystemmajrelease: '8',
         operatingsystemrelease:    '8.0',
         lsbdistcodename:           'jessie',
         path:                      '/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games',

@@ -15,6 +15,21 @@ class monero::service inherits monero {
       hasrestart => true,
       subscribe  => File['monerod_config_file'],
     }
+    -> logrotate::rule { 'monerod':
+      path          => "${monero::log_dir}/${monero::monerod_log_file}",
+      compress      => true,
+      create        => true,
+      create_mode   => '640',
+      create_owner  => 'root',
+      create_group  => 'adm',
+      delaycompress => true,
+      ifempty       => false,
+      rotate        => 52,
+      rotate_every  => 'week',
+      sharedscripts => true,
+      postrotate    => 'systemctl restart monerod.service',
+    }
+
     systemd::unit_file { 'monero-wallet-rpc.service':
       content => template('monero/monero-wallet-rpc.service.erb'),
     }
@@ -24,6 +39,20 @@ class monero::service inherits monero {
       enable     => $monero::service_enable,
       hasrestart => true,
       subscribe  => File['wallet_rpc_config_file'],
+    }
+    -> logrotate::rule { 'monero-wallet-rpc':
+      path          => "${monero::log_dir}/${monero::wallet_rpc_log_file}",
+      compress      => true,
+      create        => true,
+      create_mode   => '640',
+      create_owner  => 'root',
+      create_group  => 'adm',
+      delaycompress => true,
+      ifempty       => false,
+      rotate        => 52,
+      rotate_every  => 'week',
+      sharedscripts => true,
+      postrotate    => 'systemctl restart monero-wallet-rpc.service',
     }
   }
 }
