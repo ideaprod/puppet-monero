@@ -40,33 +40,61 @@ include ::monero
 
 The following parameters are available in the `::monero` class:
 
-##### `config_file`
-
-Specifies a path to the main config file. Valid options: string. Default value: varies with operating system
-
 ##### `config_dir`
 
-Specifies a path to the config directory. Valid options: string. Default value: varies with operating system
+Specifies the config directory path. Valid options: string. Default value: '/etc/monero'
 
-##### `log_file`
+##### `data_dir`
 
-Specifies the logfile directive value. Valid options: string. Default value: '/var/log/monero.log'
+Specifies the data directory path. Valid options: string. Default value: '/var/lib/monero'
 
-##### `user`
+##### `group`
 
-Specifies the user to connect to the remote M/Monero server. Valid options: string. Default value: 'monero'
+Specifies the Unix group to launch monerod and monero-wallet-rpc. Valid options: string. Default value: 'monero'
+
+##### `log_dir`
+
+Specifies the log directory path. Valid options: absolute path. Default value: '/var/log/monero'
+
+##### `log_level`
+
+Specifies the log level. Valid options: integer. Default value: '0'
+
+##### `monerod_config_file`
+
+Specifies a path to the monerod config file. Valid options: string. Default value: 'monerod.conf'
+
+##### `monerod_log_file`
+
+Specifies the monerod log filename. Valid options: string. Default value: 'monerod.log'
+
+##### `monerod_service_name`
+
+Tells Puppet what monerod service to manage. Valid options: string. Default value: 'monerod'
 
 ##### `service_ensure`
 
-Tells Puppet whether the Monero service should be running. Valid options: 'running' or 'stopped'. Default value: 'running'
+Tells Puppet whether the Monero services should be running. Valid options: 'running' or 'stopped'. Default value: 'running'
 
 ##### `service_manage`
 
-Tells Puppet whether to manage the Monero service. Valid options: 'true' or 'false'. Default value: 'true'
+Tells Puppet whether to manage the Monero services. Valid options: 'true' or 'false'. Default value: 'true'
+
+##### `user`
+
+Specifies the Unix user to launch monerod and monero-wallet-rpc. Valid options: string. Default value: 'monero'
+
+##### `wallet_rpc_config_file`
+
+Specifies a path to the Wallet RPC config file. Valid options: string. Default value: 'monero-wallet-rpc.conf'
+
+##### `wallet_rpc_log_file`
+
+Specifies the Wallet RPC log filename. Valid options: string. Default value: 'monero-wallet-rpc.log'
 
 ##### `service_name`
 
-Tells Puppet what Monero service to manage. Valid options: string. Default value: 'monero'
+Tells Puppet what Monero Wallet RPC service to manage. Valid options: string. Default value: 'monero-wallet-rpc'
 
 ## Limitations
 
