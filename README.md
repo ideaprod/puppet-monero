@@ -84,6 +84,14 @@ Tells Puppet whether to manage the Monero services. Valid options: 'true' or 'fa
 
 Specifies the Unix user to launch monerod and monero-wallet-rpc. Valid options: string. Default value: 'monero'
 
+##### `wallet_name`
+
+Specifies the Wallet name. Valid options: string. Default value: 'MyWallet'
+
+##### `wallet_password`
+
+Specifies the Wallet password. Valid options: string. Default value: 'MyPassw0rd'
+
 ##### `wallet_rpc_config_file`
 
 Specifies a path to the Wallet RPC config file. Valid options: string. Default value: 'monero-wallet-rpc.conf'

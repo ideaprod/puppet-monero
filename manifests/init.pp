@@ -13,6 +13,8 @@ class monero (
   $service_ensure          = $monero::params::service_ensure,
   $service_manage          = $monero::params::service_manage,
   $user                    = $monero::params::user,
+  $wallet_name             = $monero::wallet_name,
+  $wallet_password         = $monero::wallet_password,
   $wallet_rpc_config_file  = $monero::params::wallet_rpc_config_file,
   $wallet_rpc_log_file     = $monero::params::wallet_rpc_log_file,
   $wallet_rpc_service_name = $monero::params::wallet_rpc_service_name,
@@ -44,6 +46,8 @@ class monero (
   validate_string($service_ensure)
   validate_bool($service_manage_bool)
   validate_string($user)
+  validate_string($wallet_name)
+  validate_string($wallet_password)
   validate_string($wallet_rpc_config_file)
   validate_string($wallet_rpc_log_file)
   validate_string($wallet_rpc_service_name)

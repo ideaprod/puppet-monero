@@ -14,6 +14,8 @@ class monero::params {
   $service_ensure          = 'running'
   $service_manage          = true
   $user                    = 'monero'
+  $wallet_name             = 'MyWallet'
+  $wallet_password         = 'MyPassw0rd'
   $wallet_rpc_log_file     = 'monero-wallet-rpc.log'
   $wallet_rpc_config_file  = 'monero-wallet-rpc.conf'
   $wallet_rpc_service_name = 'monero-wallet-rpc'
