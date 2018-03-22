@@ -22,12 +22,21 @@ class monero::config inherits monero {
     }
   }
 
-  file { 'monero_config':
+  file { 'monerod_config_file':
     ensure  => file,
-    path    => "${monero::config_dir}/${monero::config_file}",
+    path    => "${monero::config_dir}/${monero::monerod_config_file}",
     owner   => $monero::user,
     group   => $monero::group,
     mode    => '0644',
     content => template('monero/monerod.conf.erb'),
   }
+  file { 'wallet_rpc_config_file':
+    ensure  => file,
+    path    => "${monero::config_dir}/${monero::wallet_rpc_config_file}",
+    owner   => $monero::user,
+    group   => $monero::group,
+    mode    => '0644',
+    content => template('monero/monero-wallet-rpc.conf.erb'),
+  }
+
 }

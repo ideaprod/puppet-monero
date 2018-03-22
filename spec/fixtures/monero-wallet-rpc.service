@@ -1,0 +1,21 @@
+[Unit]
+Description=Monero Wallet RPC
+After=network.target
+
+[Service]
+User=monero
+Group=monero
+WorkingDirectory=~
+RuntimeDirectory=monero
+
+Type=forking
+PIDFile=/run/monero/monero-wallet-rpc.pid
+
+ExecStart=/opt/monero-v0.11.1.0/monero-wallet-rpc --config-file /etc/monero/monero-wallet-rpc.conf \
+    --detach --pidfile /run/monero/monero-wallet-rpc.pid
+
+Restart=always
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

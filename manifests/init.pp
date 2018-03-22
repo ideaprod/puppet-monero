@@ -1,18 +1,21 @@
 # == Class: monero
 #
 class monero (
-  $config_file    = $monero::params::config_file,
-  $config_dir     = $monero::params::config_dir,
-  $data_dir       = $monero::params::data_dir,
-  $group          = $monero::params::group,
-  $log_dir        = $monero::params::log_dir,
-  $log_file       = $monero::params::log_file,
-  $log_level      = $monero::params::log_level,
-  $service_enable = $monero::params::service_enable,
-  $service_ensure = $monero::params::service_ensure,
-  $service_manage = $monero::params::service_manage,
-  $service_name   = $monero::params::service_name,
-  $user           = $monero::params::user,
+  $config_dir              = $monero::params::config_dir,
+  $data_dir                = $monero::params::data_dir,
+  $group                   = $monero::params::group,
+  $log_dir                 = $monero::params::log_dir,
+  $log_level               = $monero::params::log_level,
+  $monerod_config_file     = $monero::params::monerod_config_file,
+  $monerod_log_file        = $monero::params::monerod_log_file,
+  $monerod_service_name    = $monero::params::monerod_service_name,
+  $service_enable          = $monero::params::service_enable,
+  $service_ensure          = $monero::params::service_ensure,
+  $service_manage          = $monero::params::service_manage,
+  $user                    = $monero::params::user,
+  $wallet_rpc_config_file  = $monero::params::wallet_rpc_config_file,
+  $wallet_rpc_log_file     = $monero::params::wallet_rpc_log_file,
+  $wallet_rpc_service_name = $monero::params::wallet_rpc_service_name,
 ) inherits monero::params {
   # <stringified variable handling>
   if is_string($service_enable) == true {
@@ -29,18 +32,21 @@ class monero (
   # </stringified variable handling>
 
   # <variable validations>
-  validate_string($config_file)
   validate_absolute_path($config_dir)
   validate_absolute_path($data_dir)
   validate_string($group)
   validate_absolute_path($log_dir)
-  validate_string($log_file)
   validate_integer($log_level)
+  validate_string($monerod_config_file)
+  validate_string($monerod_log_file)
+  validate_string($monerod_service_name)
   validate_bool($service_enable_bool)
   validate_string($service_ensure)
   validate_bool($service_manage_bool)
-  validate_string($service_name)
   validate_string($user)
+  validate_string($wallet_rpc_config_file)
+  validate_string($wallet_rpc_log_file)
+  validate_string($wallet_rpc_service_name)
   # </variable validations>
 
   anchor { "${module_name}::begin": }

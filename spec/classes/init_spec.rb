@@ -46,68 +46,100 @@ describe 'monero' do
                                                               'mode'   => '0755')
         end
 
-        monero_config_fixture = File.read(fixtures('monerod.conf'))
+        monerod_config_file_fixture = File.read(fixtures('monerod.conf'))
         it do
-          is_expected.to contain_file('monero_config').with_content(monero_config_fixture)
-                                                      .with('ensure' => 'file',
-                                                            'path'   => '/etc/monerod.conf',
-                                                            'owner'  => 'monero',
-                                                            'group'  => 'monero',
-                                                            'mode'   => '0644')
+          is_expected.to contain_file('monerod_config_file').with_content(monerod_config_file_fixture)
+                                                            .with('ensure' => 'file',
+                                                                  'path'   => '/etc/monero/monerod.conf',
+                                                                  'owner'  => 'monero',
+                                                                  'group'  => 'monero',
+                                                                  'mode'   => '0644')
         end
 
-        monero_service_fixture = File.read(fixtures('monerod.service'))
-        it { is_expected.to contain_systemd__unit_file('monerod.service').with_content(monero_service_fixture) }
+        monerod_service_fixture = File.read(fixtures('monerod.service'))
+        it { is_expected.to contain_systemd__unit_file('monerod.service').with_content(monerod_service_fixture) }
 
         it do
           is_expected.to contain_service('monerod').with('ensure'     => 'running',
                                                          'enable'     => true,
                                                          'name'       => 'monerod',
                                                          'hasrestart' => true,
-                                                         'subscribe'  => 'File[monero_config]')
+                                                         'subscribe'  => 'File[monerod_config_file]')
         end
+
+        wallet_rpc_config_fixture = File.read(fixtures('monero-wallet-rpc.conf'))
+        it do
+          is_expected.to contain_file('wallet_rpc_config_file').with_content(wallet_rpc_config_fixture)
+                                                               .with('ensure' => 'file',
+                                                                     'path'   => '/etc/monero/monero-wallet-rpc.conf',
+                                                                     'owner'  => 'monero',
+                                                                     'group'  => 'monero',
+                                                                     'mode'   => '0644')
+        end
+
+        wallet_rpc_service_fixture = File.read(fixtures('monero-wallet-rpc.service'))
+        it { is_expected.to contain_systemd__unit_file('monero-wallet-rpc.service').with_content(wallet_rpc_service_fixture) }
+
+        it do
+          is_expected.to contain_service('wallet_rpc').with('ensure'     => 'running',
+                                                            'enable'     => true,
+                                                            'name'       => 'monero-wallet-rpc',
+                                                            'hasrestart' => true,
+                                                            'subscribe'  => 'File[wallet_rpc_config_file]')
+        end
+
         describe 'parameter functionality' do
           context 'when service_enable is set to valid bool <false>' do
             let(:params) { { service_enable: false } }
 
             it { is_expected.to contain_service('monerod').with_enable(false) }
+            it { is_expected.to contain_service('wallet_rpc').with_enable(false) }
           end
 
           context 'when service_ensure is set to valid string <stopped>' do
             let(:params) { { service_ensure: 'stopped' } }
 
             it { is_expected.to contain_service('monerod').with_ensure('stopped') }
+            it { is_expected.to contain_service('wallet_rpc').with_ensure('stopped') }
           end
 
           context 'when service_manage is set to valid bool <false>' do
             let(:params) { { service_manage: false } }
 
             it { is_expected.not_to contain_service('monerod') }
+            it { is_expected.not_to contain_service('wallet_rpc') }
             it { is_expected.not_to contain_systemd__unit_file('monerod.service') }
+            it { is_expected.not_to contain_systemd__unit_file('monero-wallet-rpc.service') }
           end
 
-          context 'when service_name is set to valid string <stopped>' do
-            let(:params) { { service_name: 'monero3' } }
+          context 'when monerod_service_name is set to valid string <monerod3>' do
+            let(:params) { { monerod_service_name: 'monerod3' } }
 
-            it { is_expected.to contain_service('monerod').with_name('monero3') }
+            it { is_expected.to contain_service('monerod').with_name('monerod3') }
           end
 
-          context 'when log_file is set to valid string <monero3.log>' do
-            let(:params) { { log_file: 'monero3.log' } }
+          context 'when wallet_rpc_service_name is set to valid string <monero-wallet-rpc3>' do
+            let(:params) { { wallet_rpc_service_name: 'monero-wallet-rpc3' } }
 
-            it { is_expected.to contain_file('monero_config').with_content(%r{^log-file=/var/log/monero/monero3\.log$}) }
+            it { is_expected.to contain_service('wallet_rpc').with_name('monero-wallet-rpc3') }
           end
 
-          context 'when config_file is set to valid string <monero3.conf>' do
-            let(:params) { { config_file: 'monero3.conf' } }
+          context 'when monerod_config_file is set to valid string <monerod3.conf>' do
+            let(:params) { { monerod_config_file: 'monerod3.conf' } }
 
-            it { is_expected.to contain_file('monero_config').with_path('/etc/monero3.conf') }
+            it { is_expected.to contain_file('monerod_config_file').with_path('/etc/monero/monerod3.conf') }
           end
 
-          context 'when config_dir is set to valid path </etc/monero>' do
-            let(:params) { { config_dir: '/etc/monero' } }
+          context 'when wallet_rpc_config_file is set to valid string <monero-wallet-rpc3.conf>' do
+            let(:params) { { wallet_rpc_config_file: 'monero-wallet-rpc3.conf' } }
 
-            it { is_expected.to contain_file('monero_config_dir').with_path('/etc/monero') }
+            it { is_expected.to contain_file('wallet_rpc_config_file').with_path('/etc/monero/monero-wallet-rpc3.conf') }
+          end
+
+          context 'when config_dir is set to valid path </etc/monero3>' do
+            let(:params) { { config_dir: '/etc/monero3' } }
+
+            it { is_expected.to contain_file('monero_config_dir').with_path('/etc/monero3') }
           end
         end
       end
@@ -221,7 +253,7 @@ describe 'monero' do
         message: 'Expected.*to be an Integer',
       },
       'string' => {
-        name: %w[config_file group log_file service_name user],
+        name: %w[group monerod_config_file monerod_log_file monerod_service_name user wallet_rpc_config_file wallet_rpc_log_file wallet_rpc_service_name],
         valid: ['present'],
         invalid: [%w[array], { 'ha' => 'sh' }],
         message: 'is not a string',

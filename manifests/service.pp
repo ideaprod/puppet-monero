@@ -10,10 +10,20 @@ class monero::service inherits monero {
     }
     ~> service { 'monerod':
       ensure     => $monero::service_ensure,
-      name       => $monero::service_name,
+      name       => $monero::monerod_service_name,
       enable     => $monero::service_enable,
       hasrestart => true,
-      subscribe  => File['monero_config'],
+      subscribe  => File['monerod_config_file'],
+    }
+    systemd::unit_file { 'monero-wallet-rpc.service':
+      content => template('monero/monero-wallet-rpc.service.erb'),
+    }
+    ~> service { 'wallet_rpc':
+      ensure     => $monero::service_ensure,
+      name       => $monero::wallet_rpc_service_name,
+      enable     => $monero::service_enable,
+      hasrestart => true,
+      subscribe  => File['wallet_rpc_config_file'],
     }
   }
 }
